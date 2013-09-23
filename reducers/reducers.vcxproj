@@ -72,6 +72,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\wenda\reducers\filter.h" />
     <ClInclude Include="include\wenda\reducers\range_reducible.h" />
     <ClInclude Include="include\wenda\reducers\reduce.h" />
     <ClInclude Include="include\wenda\reducers\reducers_common.h" />

@@ -18,7 +18,7 @@ public:
 	{}
 
     template<typename FunctionType, typename SeedType>
-	SeedType reduce(FunctionType&& function, SeedType seed)
+	SeedType reduce(FunctionType&& function, SeedType seed) const
 	{
 		for (auto&& val : range)
 		{
