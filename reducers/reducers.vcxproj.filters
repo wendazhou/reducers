@@ -24,5 +24,11 @@
     <ClInclude Include="include\wenda\reducers\range_reducible.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\wenda\reducers\filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
