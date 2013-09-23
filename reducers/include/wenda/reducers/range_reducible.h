@@ -12,6 +12,7 @@ class range_reducible
 {
 	Range const& range;
 
+public:
 	range_reducible(Range const& range)
 		: range(range)
 	{}
@@ -27,6 +28,12 @@ class range_reducible
 		return seed;
 	}
 };
+
+template<typename Range>
+range_reducible<Range> make_range_reducible(Range&& range)
+{
+	return range_reducible<Range>(std::forward<Range>(range));
+}
 
 WENDA_REDUCERS_NAMESPACE_END
 
