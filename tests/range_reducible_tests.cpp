@@ -23,5 +23,16 @@ namespace tests
 
 			Assert::AreEqual(1 + 2 + 3 + 4 + 5 + 6, result);
 		}
+
+		TEST_METHOD(RangeReducible_Reduce_Empty_Range_Returns_Seed)
+		{
+			std::vector<int> data;
+
+			auto reducible = make_range_reducible(data);
+
+			auto result = reducible.reduce(std::plus<int>(), 5);
+
+			Assert::AreEqual(5, result);
+		}
 	};
 }
