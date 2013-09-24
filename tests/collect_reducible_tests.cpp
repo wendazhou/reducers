@@ -21,6 +21,6 @@ namespace tests
 				.reduce(std::plus<int>(), 0);
 
 			Assert::AreEqual(1 + 2 + 3 + 4 + 5 + 6, result);
-		} 
+		}
 	};
 }
