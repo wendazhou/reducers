@@ -85,6 +85,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="collect_reducible_tests.cpp" />
     <ClCompile Include="filter_reducible_tests.cpp" />
     <ClCompile Include="map_reducible_tests.cpp" />
     <ClCompile Include="stdafx.cpp">
