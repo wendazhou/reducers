@@ -6,6 +6,8 @@
 #include <utility>
 #include <type_traits>
 
+#include "reduce.h"
+
 WENDA_REDUCERS_NAMESPACE_BEGIN
 
 namespace detail
@@ -58,7 +60,8 @@ public:
     template<typename FunctionType, typename SeedType>
 	SeedType reduce(FunctionType&& function, SeedType&& seed) const
 	{
-		return reducible.reduce(
+		return WENDA_REDUCERS_NAMESPACE::reduce(
+			reducible,
 			detail::make_filter_reducible_function(predicate, std::forward<FunctionType>(function)), 
 			std::forward<SeedType>(seed));
 	}

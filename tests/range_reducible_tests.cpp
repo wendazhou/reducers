@@ -2,6 +2,7 @@
 #include "CppUnitTest.h"
 
 #include <wenda/reducers/range_reducible.h>
+#include <wenda/reducers/reduce.h>
 
 #include <vector>
 
@@ -33,6 +34,17 @@ namespace tests
 			auto result = reducible.reduce(std::plus<int>(), 5);
 
 			Assert::AreEqual(5, result);
+		}
+
+		TEST_METHOD(RangeReducible_Has_Reducible_Member_Function)
+		{
+			std::vector<int> data{ 1, 2, 3, 4, 5, 6 };
+
+			auto reducible = make_range_reducible(data);
+
+			auto value = detail::has_reducible_member_function<decltype(reducible), std::plus<int>, int>::value;
+
+			Assert::IsTrue(value);
 		}
 	};
 }

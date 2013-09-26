@@ -6,6 +6,8 @@
 #include <utility>
 #include <type_traits>
 
+#include "reduce.h"
+
 WENDA_REDUCERS_NAMESPACE_BEGIN
 
 namespace detail
@@ -44,7 +46,7 @@ public:
 	Seed reduce(Reducer&& reducer, Seed&& seed) const
 	{
 		typedef detail::map_reducing_function<MapFunction, typename std::decay<Reducer>::type> map_function_type;
-		return reducible.reduce(map_function_type(mapFunction, std::forward<Reducer>(reducer)), std::forward<Seed>(seed));
+		return WENDA_REDUCERS_NAMESPACE::reduce(reducible, map_function_type(mapFunction, std::forward<Reducer>(reducer)), std::forward<Seed>(seed));
 	}
 };
 

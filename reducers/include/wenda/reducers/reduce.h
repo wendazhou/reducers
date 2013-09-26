@@ -21,10 +21,33 @@ namespace detail
 		{
 		}
 	};
+
+	template<typename T, typename FuncType, typename SeedType>
+	class has_reducible_member_function
+	{
+		template<typename U> static std::true_type test(
+			typename std::add_pointer<decltype(
+			    std::declval<U>().reduce(
+			        std::declval<FuncType>(), 
+			        std::declval<SeedType>())
+			)>::type);
+		template<typename U> static std::false_type test(...);
+
+	public:
+		typedef decltype(test<T>(nullptr)) type;
+		static const bool value = type::value;
+	};
 }
 
 template<typename Reducible, typename FuncType, typename SeedType>
-SeedType reduce(Reducible&& reducible, FuncType&& function, SeedType&& seed)
+typename std::enable_if<
+	detail::has_reducible_member_function<
+	    typename std::decay<Reducible>::type, 
+	    typename std::decay<FuncType>::type, 
+	    typename std::decay<SeedType>::type>::value, 
+	SeedType
+>::type
+reduce(Reducible&& reducible, FuncType&& function, SeedType&& seed)
 {
 	return reducible.reduce(std::forward<FuncType>(function), std::forward<SeedType>(seed));
 }

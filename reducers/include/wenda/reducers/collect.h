@@ -6,6 +6,8 @@
 #include <utility>
 #include <type_traits>
 
+#include "reduce.h"
+
 WENDA_REDUCERS_NAMESPACE_BEGIN
 
 namespace detail
@@ -55,7 +57,7 @@ public:
 	typename std::decay<Seed>::type reduce(Reducer&& reducer, Seed&& seed) const
 	{
 		typedef detail::collect_reducing_function<typename std::decay<Reducer>::type, ExpandFunction> collect_reducer_t;
-		return reducible.reduce(collect_reducer_t(std::forward<Reducer>(reducer), expandFunction), std::forward<Seed>(seed));
+		return WENDA_REDUCERS_NAMESPACE::reduce(reducible, collect_reducer_t(std::forward<Reducer>(reducer), expandFunction), std::forward<Seed>(seed));
 	}
 };
 
