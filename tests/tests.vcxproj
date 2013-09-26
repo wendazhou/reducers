@@ -87,6 +87,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="assembly_examples.cpp">
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
+      <AssemblerListingLocation>$(OutDir)</AssemblerListingLocation>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="collect_reducible_tests.cpp" />
     <ClCompile Include="filter_reducible_tests.cpp" />
     <ClCompile Include="map_reducible_tests.cpp" />

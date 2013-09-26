@@ -74,6 +74,7 @@
   <ItemGroup>
     <ClInclude Include="include\wenda\reducers\collect.h" />
     <ClInclude Include="include\wenda\reducers\filter.h" />
+    <ClInclude Include="include\wenda\reducers\iterator_pair_reducible.h" />
     <ClInclude Include="include\wenda\reducers\map.h" />
     <ClInclude Include="include\wenda\reducers\range_reducible.h" />
     <ClInclude Include="include\wenda\reducers\reduce.h" />

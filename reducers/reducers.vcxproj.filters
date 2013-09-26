@@ -33,5 +33,8 @@
     <ClInclude Include="include\wenda\reducers\collect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\wenda\reducers\iterator_pair_reducible.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
