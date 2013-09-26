@@ -19,7 +19,7 @@ namespace tests
 			std::vector<std::vector<int>> data{ { 1, 2, 3 }, { 4, 5, 6 } };
 
 			auto result = collect(make_range_reducible(data), [](std::vector<int> const& d) { return make_range_reducible(d); })
-				.reduce(std::plus<int>(), 0);
+				          | reduce(std::plus<int>(), 0);
 
 			Assert::AreEqual(1 + 2 + 3 + 4 + 5 + 6, result);
 		}

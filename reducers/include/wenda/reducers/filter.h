@@ -15,11 +15,11 @@ namespace detail
     template<typename Predicate, typename Reducer>
 	struct filter_reducible_function
 	{
-		Predicate const& predicate;
-		Reducer const& reducer;
+		Predicate predicate;
+		Reducer reducer;
 
-		filter_reducible_function(Predicate const& predicate, Reducer const& reducer)
-			: predicate(predicate), reducer(reducer)
+		filter_reducible_function(Predicate predicate, Reducer reducer)
+			: predicate(std::move(predicate)), reducer(std::move(reducer))
 		{
 		}
 
@@ -36,14 +36,6 @@ namespace detail
 			}
 		}
 	};
-
-    template<typename Predicate, typename Reducer>
-    filter_reducible_function<typename std::decay<Predicate>::type, typename std::decay<Reducer>::type>
-	make_filter_reducible_function(Predicate&& predicate, Reducer&& reducer)
-	{
-		return filter_reducible_function<typename std::decay<Predicate>::type, typename std::decay<Reducer>::type>(
-			std::forward<Predicate>(predicate), std::forward<Reducer>(reducer));
-	}
 }
 
 /**
@@ -52,25 +44,36 @@ namespace detail
 * by a predicate.
 */
 template<typename Reducible, typename Predicate>
-class filter_reducible
+struct filter_reducible
 {
 	Reducible reducible;
 	Predicate predicate;
-public:
+
 	filter_reducible(Reducible reducible, Predicate predicate)
 		: reducible(std::move(reducible)), predicate(std::move(predicate))
 	{
 	}
-
-    template<typename FunctionType, typename SeedType>
-	SeedType reduce(FunctionType&& function, SeedType&& seed) const
-	{
-		return WENDA_REDUCERS_NAMESPACE::reduce(
-			reducible,
-			detail::make_filter_reducible_function(predicate, std::forward<FunctionType>(function)), 
-			std::forward<SeedType>(seed));
-	}
 };
+
+template<typename Reducible, typename Predicate, typename Reducer, typename Seed>
+typename std::decay<Seed>::type reduce(filter_reducible<Reducible, Predicate> const& reducible, Reducer&& reducer, Seed&& seed)
+{
+	typedef detail::filter_reducible_function<Predicate, typename std::decay<Reducer>::type> filter_reducer_t;
+	return reduce(
+		reducible.reducible,
+		filter_reducer_t(reducible.predicate, std::forward<Reducer>(reducer)),
+		std::forward<Seed>(seed));
+}
+
+template<typename Reducible, typename Predicate, typename Reducer, typename Seed>
+typename std::decay<Seed>::type reduce(filter_reducible<Reducible, Predicate>&& reducible, Reducer&& reducer, Seed&& seed)
+{
+	typedef detail::filter_reducible_function<Predicate, typename std::decay<Reducer>::type> filter_reducer_t;
+	return reduce(
+		std::move(reducible.reducible),
+		filter_reducer_t(std::move(reducible.predicate), std::forward<Reducer>(reducer)),
+		std::forward<Seed>(seed));
+}
 
 namespace detail
 {

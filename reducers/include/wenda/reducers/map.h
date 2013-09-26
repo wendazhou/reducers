@@ -37,23 +37,36 @@ namespace detail
 * by a function.
 */
 template<typename MapFunction, typename Reducible>
-class map_reducible
+struct map_reducible
 {
 	Reducible reducible;
 	MapFunction mapFunction;
-public:
+
 	map_reducible(MapFunction mapFunction, Reducible reducible)
 		: reducible(std::move(reducible)), mapFunction(std::move(mapFunction))
 	{
 	}
-
-    template<typename Reducer, typename Seed>
-	Seed reduce(Reducer&& reducer, Seed&& seed) const
-	{
-		typedef detail::map_reducing_function<MapFunction, typename std::decay<Reducer>::type> map_function_type;
-		return WENDA_REDUCERS_NAMESPACE::reduce(reducible, map_function_type(mapFunction, std::forward<Reducer>(reducer)), std::forward<Seed>(seed));
-	}
 };
+
+template<typename Reducible, typename MapFunction, typename Reducer, typename Seed>
+typename std::decay<Seed>::type reduce(map_reducible<MapFunction, Reducible> const& reducible, Reducer&& reducer, Seed&& seed)
+{
+	typedef detail::map_reducing_function<MapFunction, typename std::decay<Reducer>::type> map_function_type;
+	return reduce(
+        reducible.reducible,
+		map_function_type(reducible.mapFunction, std::forward<Reducer>(reducer)),
+		std::forward<Seed>(seed));
+}
+
+template<typename Reducible, typename MapFunction, typename Reducer, typename Seed>
+typename std::decay<Seed>::type reduce(map_reducible<MapFunction, Reducible>&& reducible, Reducer&& reducer, Seed&& seed)
+{
+	typedef detail::map_reducing_function<MapFunction, typename std::decay<Reducer>::type> map_function_type;
+	return reduce(
+        std::move(reducible.reducible),
+		map_function_type(std::move(reducible.mapFunction), std::forward<Reducer>(reducer)),
+		std::forward<Seed>(seed));
+}
 
 namespace detail
 {

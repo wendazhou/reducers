@@ -49,23 +49,36 @@ namespace detail
 * and subsequently flattened.
 */
 template<typename Reducible, typename ExpandFunction>
-class collect_reducible
+struct collect_reducible
 {
 	Reducible reducible;
 	ExpandFunction expandFunction;
-public:
+
 	collect_reducible(Reducible reducible, ExpandFunction expandFunction)
 		: reducible(std::move(reducible)), expandFunction(std::move(expandFunction))
 	{
 	}
-
-    template<typename Reducer, typename Seed>
-	typename std::decay<Seed>::type reduce(Reducer&& reducer, Seed&& seed) const
-	{
-		typedef detail::collect_reducing_function<typename std::decay<Reducer>::type, ExpandFunction> collect_reducer_t;
-		return WENDA_REDUCERS_NAMESPACE::reduce(reducible, collect_reducer_t(std::forward<Reducer>(reducer), expandFunction), std::forward<Seed>(seed));
-	}
 };
+
+template<typename Reducible, typename ExpandFunction, typename Reducer, typename Seed>
+typename std::decay<Seed>::type reduce(collect_reducible<Reducible, ExpandFunction> const& reducible, Reducer&& reducer, Seed&& seed)
+{
+	typedef detail::collect_reducing_function<typename std::decay<Reducer>::type, ExpandFunction> collect_reducer_t;
+	return reduce(
+		reducible.reducible, 
+		collect_reducer_t(std::forward<Reducer>(reducer), 
+		reducible.expandFunction), std::forward<Seed>(seed));
+}
+
+template<typename Reducible, typename ExpandFunction, typename Reducer, typename Seed>
+typename std::decay<Seed>::type reduce(collect_reducible<Reducible, ExpandFunction>&& reducible, Reducer&& reducer, Seed&& seed)
+{
+	typedef detail::collect_reducing_function<typename std::decay<Reducer>::type, ExpandFunction> collect_reducer_t;
+	return reduce(
+		std::move(reducible.reducible),
+		collect_reducer_t(std::forward<Reducer>(reducer), std::move(reducible.expandFunction)), 
+		std::forward<Seed>(seed));
+}
 
 namespace detail
 {
