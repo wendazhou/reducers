@@ -5,9 +5,13 @@
 
 #include <utility>
 #include <type_traits>
+#include <numeric>
 
 WENDA_REDUCERS_NAMESPACE_BEGIN
 
+/**
+* This class implements a reducible from an iterator pair.
+*/
 template<typename iterator_type>
 class iterator_pair_reducible
 {
@@ -19,20 +23,18 @@ public:
 	{}
 
     template<typename Function, typename Seed>
-	Seed reduce(Function const& function, Seed seed) const
+	Seed reduce(Function&& function, Seed&& seed) const
 	{
-		auto it = start;
-
-		while (it != end)
-		{
-			seed = function(*start, std::move(seed));
-			++it;
-		}
-
-		return seed;
+		return std::accumulate(start, end, std::forward<Seed>(seed), std::forward<Function>(function));
 	}
 };
 
+/**
+* Creates a new reducible from an iterator pair.
+* @param start An iterator to the start of the range.
+* @param end An iterator to the end of the range.
+* @returns A reducible that, when reduced, accumulates over the given range.
+*/
 template<typename It1, typename It2>
 iterator_pair_reducible<typename std::decay<It1>::type> 
 make_iterator_pair_reducible(It1&& start, It2&& end)

@@ -24,11 +24,11 @@ namespace detail
 		}
 
         template<typename Seed, typename Value>
-		Seed operator ()(Value&& value, Seed&& seed) const
+		typename std::decay<Seed>::type operator ()(Seed&& seed, Value&& value) const
 		{
 			if (predicate(value))
 			{
-				return reducer(std::forward<Value>(value), std::forward<Seed>(seed));
+				return reducer(std::forward<Value>(seed), std::forward<Seed>(value));
 			}
 			else
 			{
@@ -46,6 +46,11 @@ namespace detail
 	}
 }
 
+/**
+* This class implements a reducible that, when reduced
+* reduces the original reducible with its elements filtered
+* by a predicate.
+*/
 template<typename Reducible, typename Predicate>
 class filter_reducible
 {
@@ -81,6 +86,13 @@ namespace detail
     };
 }
 
+/**
+* Creates a new reducible that when reduced, reduces the original reducible
+* and only keeps elements corresponding to the given predicate.
+* @param reducible The original reducible to filter.
+* @param predicate The filtering predicate. It must be a function of signature (Value) -> (convertible-to-bool).
+* @returns A new reducible that implements the filtering reduce behaviour.
+*/
 template<typename Reducible, typename Predicate>
 filter_reducible<typename std::decay<Reducible>::type, typename std::decay<Predicate>::type> 
 filter(Reducible&& reducible, Predicate&& predicate)
@@ -89,6 +101,13 @@ filter(Reducible&& reducible, Predicate&& predicate)
 	return return_type(std::forward<Reducible>(reducible), std::forward<Predicate>(predicate));
 }
 
+/**
+* Filters the given reducible.
+* This function is similar to the two-argument version, but should have
+* the reducible passed in by pipeing.
+* @param predicate The filtering predicate. It must be a function of signature (Value) -> (convertible-to-bool)
+* @returns A implementation helper object that enables pipeing.
+*/
 template<typename Predicate>
 detail::filter_reducible_expression<typename std::decay<Predicate>::type>
 filter(Predicate&& predicate)

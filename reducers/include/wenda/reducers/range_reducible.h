@@ -60,6 +60,10 @@ namespace detail
 	};
 }
 
+/**
+* This class implements a member function reduce for a given range.
+* A range in this context is any class that can be used in a range-for statement.
+*/
 template<typename Range>
 class range_reducible
 {
@@ -70,24 +74,35 @@ public:
 		: range(range)
 	{}
 
+	/**
+    * Reduces the given range.
+    * This is similar to applying std::accumulate.
+	*/
     template<typename FunctionType, typename SeedType>
 	SeedType reduce(FunctionType&& function, SeedType seed) const
 	{
 		for (auto&& val : range)
 		{
-			seed = function(val, std::move(seed));
+			seed = function(std::move(seed), val);
 		}
 
 		return seed;
 	}
 };
 
+/**
+* Creates a new instance of range_reducible from the given range.
+* @param range A range, that is, an instance of a class whose instance can be used in a range for expression.
+*/
 template<typename Range>
 range_reducible<Range> make_range_reducible(Range&& range)
 {
 	return range_reducible<Range>(std::forward<Range>(range));
 }
 
+/**
+* Overload of the reduce function for ranges.
+*/
 template<typename Range, typename FuncType, typename Seed>
 typename std::enable_if<detail::enable_range_reducible<Range, FuncType, Seed>::value, Seed>::type
 reduce(Range&& range, FuncType&& function, Seed&& seed)

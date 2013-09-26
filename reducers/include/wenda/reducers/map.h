@@ -24,13 +24,18 @@ namespace detail
 		}
 
         template<typename Value, typename Seed>
-		Seed operator()(Value&& value, Seed&& seed) const
+		typename std::decay<Seed>::type operator()(Seed&& seed, Value&& value) const
 		{
-			return reducer(mapFunction(std::forward<Value>(value)), std::forward<Seed>(seed));
+			return reducer(std::forward<Seed>(seed), mapFunction(std::forward<Value>(value)));
 		}
 	};
 }
 
+/**
+* This class implements a reducible that, when reduced,
+* reduces the source reducible as if its elements where mapped
+* by a function.
+*/
 template<typename MapFunction, typename Reducible>
 class map_reducible
 {
@@ -52,6 +57,10 @@ public:
 
 namespace detail
 {
+	/**
+    * This struct is a holder for the arguments of the map function.
+    * It is used to enable pipe expressions for map.
+	*/
 	template<typename MapFunction>
 	struct map_reducible_expression
 	{
@@ -85,6 +94,13 @@ namespace detail
 	}
 }
 
+/**
+* Creates a new reducible that when reduced, reduces the
+* original reducible with its values mapped through the given function.
+* @param reducible The reducible that is to have its value mapped.
+* @param mapFunction A function that maps the elements of the given reducible.
+* @returns A new reducible that implements the described semantics when reduced.
+*/
 template<typename MapFunction, typename Reducible>
 map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type>
 map(Reducible&& reducible, MapFunction&& mapFunction)
@@ -93,6 +109,13 @@ map(Reducible&& reducible, MapFunction&& mapFunction)
 	return return_type(std::forward<MapFunction>(mapFunction), std::forward<Reducible>(reducible));
 }
 
+/**
+* Maps the given reducible through the given function.
+* This is equivalent to the two-argument version, but is
+* destined to be used in a pipe expression.
+* @param mapFunction A function that maps the elements of the reducible to be given.
+* @returns A holder object that can be composed with a reducible through a pipe | operator to perform the operation.
+*/
 template<typename MapFunction>
 detail::map_reducible_expression<typename std::decay<MapFunction>::type>
 map(MapFunction&& mapFunction)

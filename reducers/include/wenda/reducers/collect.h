@@ -24,9 +24,10 @@ namespace detail
 		}
 
         template<typename Value, typename Seed>
-		typename std::decay<Seed>::type operator()(Value&& value, Seed&& seed)
+		typename std::decay<Seed>::type operator()(Seed&& seed, Value&& value)
 		{
-			return expander(std::forward<Value>(value)).reduce(reducer, std::forward<Seed>(seed));
+			return expander(std::forward<Value>(value)) 
+				   | reduce(reducer, std::forward<Seed>(seed));
 		}
 	};
 
@@ -42,6 +43,11 @@ namespace detail
 	};
 }
 
+/**
+* This class implements a reducible that corresponds to
+* a source reducible that has been mapped through the expand function
+* and subsequently flattened.
+*/
 template<typename Reducible, typename ExpandFunction>
 class collect_reducible
 {
@@ -80,6 +86,15 @@ namespace detail
 	}
 }
 
+/**
+* Creates a new reducible that corresponds to the source reducible,
+* with each element expanded to a reducible by the expansion function,
+* and subsequently flattened.
+* It corresponds to SelectMany in C#, or the monadic bind in sequence monads.
+* @param reducible The reducible to collect
+* @param expandFunction The expansion function. It must have signature (Value) -> Reducible.
+* @returns A reducible object implementing the indicated behaviour.
+*/
 template<typename Reducible, typename ExpandFunction>
 collect_reducible<typename std::decay<Reducible>::type, typename std::decay<ExpandFunction>::type>
 collect(Reducible&& reducible, ExpandFunction&& expandFunction)
@@ -88,6 +103,12 @@ collect(Reducible&& reducible, ExpandFunction&& expandFunction)
 	return return_type(std::forward<Reducible>(reducible), std::forward<ExpandFunction>(expandFunction));
 }
 
+/**
+* Expands and flattens the given reducible with the given expansion function.
+* This is similar to the two-argument version, except that the reducible should
+* be passed in by pipeing.
+* @param expandFunction The expansion function. It must have signature (Value) -> Reducible.
+*/
 template<typename ExpandFunction>
 detail::collect_reducible_expression<typename std::decay<ExpandFunction>::type>
 collect(ExpandFunction&& expandFunction)

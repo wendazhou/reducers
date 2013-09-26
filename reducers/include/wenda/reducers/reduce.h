@@ -10,6 +10,10 @@ WENDA_REDUCERS_NAMESPACE_BEGIN
 
 namespace detail
 {
+	/**
+    * This struct implements a holder for the parameters to reduce.
+    * It is used to enable pipeing expressions through the framework.
+	*/
     template<typename FuncType, typename Seed>
 	struct reduce_expression
 	{
@@ -22,6 +26,10 @@ namespace detail
 		}
 	};
 
+	/**
+    * This class implements a trait to determine whether a given type
+    * is reducible with the given function type and seed type.
+	*/
 	template<typename T, typename FuncType, typename SeedType>
 	class has_reducible_member_function
 	{
@@ -39,6 +47,16 @@ namespace detail
 	};
 }
 
+/**
+* Reduces the given reducible using the given aggregate function and seed value.
+* This is the default implementation of the reduce function, which works for all
+* classes that implement a public reduce member function. Overload this function
+* to enable reduction on other classes.
+* @param reducible The reducible to reduce. It must implement a reduce member function.
+* @param function The reduction/aggregation function, it must have signature (Seed, Value) -> Seed
+* @param seed The initial value to be passed to the reduction function.
+* @returns The result of the aggregation.
+*/
 template<typename Reducible, typename FuncType, typename SeedType>
 typename std::enable_if<
 	detail::has_reducible_member_function<
@@ -52,12 +70,23 @@ reduce(Reducible&& reducible, FuncType&& function, SeedType&& seed)
 	return reducible.reduce(std::forward<FuncType>(function), std::forward<SeedType>(seed));
 }
 
+/**
+* Reduces the given reducible passed in using the pipe expression
+* with the given function and seed.
+* This is intended to be used in pipe expressions, for example
+* @code
+* reducible | reduce(std::plus<int>(), 0);
+* @endcode
+* @param function The reduction/aggregation function. It must have signature (Value, Seed) -> Seed
+* @param seed The initial value to be passed to the reduction function.
+* @returns An object that can be or-ed with a reducible to reduce it.
+*/
 template<typename FuncType, typename Seed>
 detail::reduce_expression<typename std::decay<FuncType>::type, typename std::decay<Seed>::type>
-reduce(FuncType&& functype, Seed&& seed)
+reduce(FuncType&& function, Seed&& seed)
 {
 	typedef detail::reduce_expression<typename std::decay<FuncType>::type, typename std::decay<Seed>::type> return_t;
-	return return_t(std::forward<FuncType>(functype), std::forward<Seed>(seed));
+	return return_t(std::forward<FuncType>(function), std::forward<Seed>(seed));
 }
 
 namespace detail
