@@ -57,7 +57,7 @@ namespace detail
 	{
 		MapFunction mapFunction;
 
-		map_reducible_expression(MapFunction& mapFunction)
+		map_reducible_expression(MapFunction const& mapFunction)
 			: mapFunction(mapFunction)
 		{
 		}
