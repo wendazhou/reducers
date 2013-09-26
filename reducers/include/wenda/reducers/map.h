@@ -48,12 +48,55 @@ public:
 	}
 };
 
+namespace detail
+{
+	template<typename MapFunction>
+	struct map_reducible_expression
+	{
+		MapFunction mapFunction;
+
+		map_reducible_expression(MapFunction& mapFunction)
+			: mapFunction(mapFunction)
+		{
+		}
+
+		map_reducible_expression(MapFunction&& mapFunction)
+			: mapFunction(std::move(mapFunction))
+		{
+		}
+	};
+
+	template<typename Reducible, typename MapFunction>
+	map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type>
+	operator|(Reducible&& reducible, map_reducible_expression<MapFunction>&& mapExpression)
+	{
+		typedef map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type> return_t;
+		return return_t(std::move(mapExpression.mapFunction), std::forward<Reducible>(reducible));
+	}
+
+    template<typename Reducible, typename MapFunction>
+    map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type>
+	operator|(Reducible&& reducible, map_reducible_expression<MapFunction> const& mapExpression)
+	{
+		typedef map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type> return_t;
+		return return_t(mapExpression.mapFunction, std::forward<Reducible>(reducible));
+	}
+}
+
 template<typename MapFunction, typename Reducible>
 map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type>
 map(Reducible&& reducible, MapFunction&& mapFunction)
 {
 	typedef map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type> return_type;
 	return return_type(std::forward<MapFunction>(mapFunction), std::forward<Reducible>(reducible));
+}
+
+template<typename MapFunction>
+detail::map_reducible_expression<typename std::decay<MapFunction>::type>
+map(MapFunction&& mapFunction)
+{
+	typedef detail::map_reducible_expression<typename std::decay<MapFunction>::type> return_t;
+	return return_t(std::forward<MapFunction>(mapFunction));
 }
 
 WENDA_REDUCERS_NAMESPACE_END

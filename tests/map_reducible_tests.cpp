@@ -3,6 +3,7 @@
 
 #include <wenda/reducers/map.h>
 #include <wenda/reducers/range_reducible.h>
+#include <wenda/reducers/reduce.h>
 
 #include <vector>
 
@@ -19,6 +20,17 @@ namespace tests
 
 			auto result = map(make_range_reducible(data), [](int n){ return n * 2; })
 				.reduce(std::plus<int>(), 0);
+
+			Assert::AreEqual((1 + 2 + 3 + 4 + 5 + 6) * 2, result);
+		}
+
+		TEST_METHOD(Map_Can_Use_In_Pipe_Expression)
+		{
+			std::vector<int> data{ 1, 2, 3, 4, 5, 6 };
+			auto result =
+				make_range_reducible(data)
+				| map([](int n){return n * 2; })
+				| reduce(std::plus<int>(), 0);
 
 			Assert::AreEqual((1 + 2 + 3 + 4 + 5 + 6) * 2, result);
 		}
