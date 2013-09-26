@@ -95,6 +95,7 @@
     </ClCompile>
     <ClCompile Include="collect_reducible_tests.cpp" />
     <ClCompile Include="filter_reducible_tests.cpp" />
+    <ClCompile Include="into_tests.cpp" />
     <ClCompile Include="map_reducible_tests.cpp" />
     <ClCompile Include="reduce_tests.cpp" />
     <ClCompile Include="sequence_reducible_tests.cpp" />

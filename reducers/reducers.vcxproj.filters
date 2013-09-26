@@ -39,5 +39,8 @@
     <ClInclude Include="include\wenda\reducers\sequence_reducible.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\wenda\reducers\into.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
