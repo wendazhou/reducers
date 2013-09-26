@@ -64,12 +64,53 @@ public:
 	}
 };
 
+namespace detail
+{
+	template<typename Predicate>
+	struct filter_reducible_expression
+	{
+		Predicate predicate;
+
+		filter_reducible_expression(Predicate predicate)
+			: predicate(std::move(predicate))
+		{
+		}
+    };
+}
+
 template<typename Reducible, typename Predicate>
 filter_reducible<typename std::decay<Reducible>::type, typename std::decay<Predicate>::type> 
 filter(Reducible&& reducible, Predicate&& predicate)
 {
 	typedef filter_reducible<typename std::decay<Reducible>::type, typename std::decay<Predicate>::type> return_type;
 	return return_type(std::forward<Reducible>(reducible), std::forward<Predicate>(predicate));
+}
+
+template<typename Predicate>
+detail::filter_reducible_expression<typename std::decay<Predicate>::type>
+filter(Predicate&& predicate)
+{
+	typedef detail::filter_reducible_expression<typename std::decay<Predicate>::type> return_t;
+	return return_t(std::forward<Predicate>(predicate));
+}
+
+namespace detail
+{
+    template<typename Reducible, typename Predicate>
+    filter_reducible<typename std::decay<Reducible>::type, Predicate>
+	operator|(Reducible&& reducible, filter_reducible_expression<Predicate> const& expr)
+	{
+		typedef filter_reducible<typename std::decay<Reducible>::type, Predicate> return_t;
+		return return_t(std::forward<Reducible>(reducible), expr.predicate);
+	}
+
+    template<typename Reducible, typename Predicate>
+    filter_reducible<typename std::decay<Reducible>::type, Predicate>
+	operator|(Reducible&& reducible, filter_reducible_expression<Predicate>&& expr)
+	{
+		typedef filter_reducible<typename std::decay<Reducible>::type, Predicate> return_t;
+		return return_t(std::forward<Reducible>(reducible), std::move(expr.predicate));
+	}
 }
 
 WENDA_REDUCERS_NAMESPACE_END
