@@ -44,5 +44,8 @@
     <ClCompile Include="assembly_examples.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sequence_reducible_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
