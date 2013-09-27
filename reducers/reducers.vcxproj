@@ -73,6 +73,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\wenda\reducers.h" />
+    <ClInclude Include="include\wenda\reducers\monoid\monoid.h" />
+    <ClInclude Include="include\wenda\reducers\monoid\monoid_reduce.h" />
     <ClInclude Include="include\wenda\reducers\transformers\collect.h" />
     <ClInclude Include="include\wenda\reducers\transformers\filter.h" />
     <ClInclude Include="include\wenda\reducers\transformers\map.h" />

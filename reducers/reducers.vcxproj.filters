@@ -19,6 +19,9 @@
     <Filter Include="Header Files\reducibles">
       <UniqueIdentifier>{9d1b0550-2ff8-4eb5-b413-26a445426f46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\monoid">
+      <UniqueIdentifier>{3330dbc4-e8f4-4554-bcf2-8be0a295fe18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\wenda\reducers\reduce.h">
@@ -50,6 +53,12 @@
     </ClInclude>
     <ClInclude Include="include\wenda\reducers\reducibles\sequence_reducible.h">
       <Filter>Header Files\reducibles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\monoid\monoid.h">
+      <Filter>Header Files\monoid</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\monoid\monoid_reduce.h">
+      <Filter>Header Files\monoid</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
