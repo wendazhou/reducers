@@ -13,7 +13,7 @@ Additionally, all reducibles can be transformed by various standard transformers
 # Getting started
 
 As we have already seen, all ranges are reducible. Hence, to get started with the library, the simplest example would be
-```
+```c++
 #include <iostream>
 #include <functional>
 #include <wenda/reducers.h>
@@ -35,7 +35,7 @@ A few notes on what is happening:
 - secondly, in this case, the reduce statement is exactly equivalent to `std::accumulate(std::begin(data), std::end(data))`, and in general, `reduce` is just a generalisation of accumulate.
 
 Now, to make things more interesting, let us compute instead the sum of all the even numbers from 1 to 5. We assume that we have the same includes as previously, and the same namespace alias.
-```
+```c++
 int sum_even_1_to_5()
 {
     int data[]{1, 2, 3, 4, 5};
@@ -43,7 +43,7 @@ int sum_even_1_to_5()
 }
 ```
 This showcases our first _transformer_, which is `filter`. If you are familiar with LinQ in .Net, or boost::range, this should seem familiar. The advantages of these transformers is that they are composable. Let's see for example, the sum of the triple of all the even numbers from 1 to 5.
-```
+```c++
 int sum_triple_even_1_to_5()
 {
    int data[]{1, 2, 3, 4, 5};
@@ -53,7 +53,7 @@ int sum_triple_even_1_to_5()
 As we see, we have used the _transformer_ `map` to project all the elements to a new value.
 
 Although this is composable, it is quite akward to write, as all the operations start piling in front of the expression. In order to solve this problem, the library also uses a secondary (and preferred) syntax, overloading the `|` operator (bitwise-or) to mean pipe (in bash style). You can think of this operator as forwarding the left hand side to become the first argument of the expression of the left hand side. Let's see that in action.
-```
+```c++
 int sum_triple_even_1_to_5_improved()
 {
    int data[]{1, 2, 3, 4, 5};
