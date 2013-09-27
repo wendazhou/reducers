@@ -16,4 +16,7 @@
 #include "reducers/reducibles/iterator_pair_reducible.h"
 #include "reducers/reducibles/sequence_reducible.h"
 
+#include "reducers/monoid/monoid.h"
+#include "reducers/monoid/monoid_reduce.h"
+
 #endif // WENDA_REDUCERS_H_INCLUDED
