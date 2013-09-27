@@ -1,6 +1,13 @@
 #ifndef WENDA_REDUCERS_REDUCE_H_INCLUDED
 #define WENDA_REDUCERS_REDUCE_H_INCLUDED
 
+/**
+* @file reduce.h
+* This file contains the basic implementation for a generic reduce()
+* function that forwards to a type's reduce member function, along with
+* an overload for a two argument reduce() to be used in piped expressions.
+*/
+
 #include "reducers_common.h"
 
 #include <utility>

@@ -1,6 +1,12 @@
 #ifndef WENDA_REDUCERS_REDUCIBLES_SEQUENCE_REDUCIBLE_H_INCLUDED
 #define WENDA_REDUCERS_REDUCIBLES_SEQUENCE_REDUCIBLE_H_INCLUDED
 
+/**
+* @file sequence_reducible.h
+* This file implements a reducible that lazily generates a sequence of elements by
+* repeatedly adding a given element to the current one.
+*/
+
 #include "../reducers_common.h"
 
 #include <utility>

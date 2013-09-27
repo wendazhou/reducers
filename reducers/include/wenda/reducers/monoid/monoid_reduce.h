@@ -1,6 +1,14 @@
 #ifndef WENDA_REDUCERS_MONOID_REDUCE_H_INCLUDED
 #define WENDA_REDUCERS_MONOID_REDUCE_H_INCLUDED
 
+/**
+* @file monoid_reduce.h
+* This file contains an implementation of reduce() over a monoid.
+* This is a specialization of the general reduce() algorithm, with a
+* given operation and seed that derive from the algebraic properties of the reducible's
+* element type.
+*/
+
 #include "../reducers_common.h"
 
 #include <utility>

@@ -1,6 +1,13 @@
 #ifndef WENDA_REDUCERS_REDUCIBLES_ITERATOR_PAIR_REDUCIBLE_H_INCLUDED
 #define WENDA_REDUCERS_REDUCIBLES_ITERATOR_PAIR_REDUCIBLE_H_INCLUDED
 
+/**
+* @file iterator_pair_reducible.h
+* This file contains an implementation of a reducible
+* from a pair of iterators that point to the beginning and
+* the end of a range.
+*/
+
 #include "../reducers_common.h"
 
 #include <utility>

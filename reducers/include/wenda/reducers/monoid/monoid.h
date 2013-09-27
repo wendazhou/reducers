@@ -1,6 +1,12 @@
 #ifndef WENDA_REDUCERS_MONOID_MONOID_H_INCLUDED
 #define WENDA_REDUCERS_MONOID_MONOID_H_INCLUDED
 
+/**
+* @file monoid.h
+* This file contains the basic definition for the @ref monoid_traits class
+* that is used throughout library.
+*/
+
 #include "../reducers_common.h"
 
 #include <functional>

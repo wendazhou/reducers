@@ -1,6 +1,13 @@
 #ifndef WENDA_REDUCERS_INTO_H_INCLUDED
 #define WENDA_REDUCERS_INTO_H_INCLUDED
 
+/**
+* @file into.h
+* This file implements a special reducer, that instead
+* of accumulating towards a single value, accumulates
+* to a sequence written through a output iterator.
+*/
+
 #include "reducers_common.h"
 
 #include <utility>
