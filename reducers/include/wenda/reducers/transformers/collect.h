@@ -1,6 +1,11 @@
 #ifndef WENDA_REDUCERS_TRANSFORMERS_COLLECT_H_INCLUDED
 #define WENDA_REDUCERS_TRANSFORMERS_COLLECT_H_INCLUDED
 
+/**
+* @file collect.h
+* This file implements the collect() transformer for reducibles.
+*/
+
 #include "../reducers_common.h"
 
 #include <utility>

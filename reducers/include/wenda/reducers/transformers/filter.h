@@ -1,6 +1,11 @@
 #ifndef WENDA_REDUCERS_TRANSFORMERS_FILTER_H_INCLUDED
 #define WENDA_REDUCERS_TRANSFORMERS_FILTER_H_INCLUDED
 
+/**
+* @file filter.h
+* This file implements the filter() reducible transformer.
+*/
+
 #include "../reducers_common.h"
 
 #include <utility>
@@ -55,6 +60,9 @@ struct filter_reducible
 	}
 };
 
+/**
+* Overloads the reduce() function to reduce reducibles of type @ref filter_reducible.
+*/
 template<typename Reducible, typename Predicate, typename Reducer, typename Seed>
 typename std::decay<Seed>::type reduce(filter_reducible<Reducible, Predicate> const& reducible, Reducer&& reducer, Seed&& seed)
 {
@@ -65,6 +73,9 @@ typename std::decay<Seed>::type reduce(filter_reducible<Reducible, Predicate> co
 		std::forward<Seed>(seed));
 }
 
+/**
+* Overloads the reduce() function to reduce r-value references to reducibles of type @ref filter_reducible.
+*/
 template<typename Reducible, typename Predicate, typename Reducer, typename Seed>
 typename std::decay<Seed>::type reduce(filter_reducible<Reducible, Predicate>&& reducible, Reducer&& reducer, Seed&& seed)
 {

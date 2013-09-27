@@ -1,6 +1,11 @@
 #ifndef WENDA_REDUCERS_TRANSFORMERS_MAP_H_INCLUDED
 #define WENDA_REDUCERS_TRANSFORMERS_MAP_H_INCLUDED
 
+/**
+* @file map.h
+* This file implements the map() reducible transformer.
+*/
+
 #include "../reducers_common.h"
 
 #include <utility>
@@ -12,6 +17,11 @@ WENDA_REDUCERS_NAMESPACE_BEGIN
 
 namespace detail
 {
+	/**
+    * @internal
+    * This struct implements the functor type used when reducing
+    * a reducible as transformed by a map() transformer.
+	*/
     template<typename MapFunction, typename Reducer>
 	struct map_reducing_function
 	{
@@ -35,12 +45,14 @@ namespace detail
 * This class implements a reducible that, when reduced,
 * reduces the source reducible as if its elements where mapped
 * by a function.
+* @tparam MapFunction The type of the mapping functor. It must be invokable.
+* @tparam Reducible The type of the reducible that is mapped. It must model a reducible.
 */
 template<typename MapFunction, typename Reducible>
 struct map_reducible
 {
-	Reducible reducible;
-	MapFunction mapFunction;
+	Reducible reducible; ///< the reducible that is mapped.
+	MapFunction mapFunction; ///< the mapping function.
 
 	map_reducible(MapFunction mapFunction, Reducible reducible)
 		: reducible(std::move(reducible)), mapFunction(std::move(mapFunction))
@@ -48,6 +60,12 @@ struct map_reducible
 	}
 };
 
+/**
+* Overloads the reduce() function to reduce reducibles of type @ref map_reducible.
+* @param reducible The instance of @ref map_reducible to be reduced.
+* @param reducer A reducing function.
+* @param seed The seed for the reduction operation.
+*/
 template<typename Reducible, typename MapFunction, typename Reducer, typename Seed>
 typename std::decay<Seed>::type reduce(map_reducible<MapFunction, Reducible> const& reducible, Reducer&& reducer, Seed&& seed)
 {
@@ -58,6 +76,12 @@ typename std::decay<Seed>::type reduce(map_reducible<MapFunction, Reducible> con
 		std::forward<Seed>(seed));
 }
 
+/**
+* Overloads the reduce() function to reduce r-value references to reducibles of type @ref map_reducible.
+* @param reducible The instance of @ref map_reducible to be reduced.
+* @param reducer A reducing function.
+* @param seed The seed for the reductio operation.
+*/
 template<typename Reducible, typename MapFunction, typename Reducer, typename Seed>
 typename std::decay<Seed>::type reduce(map_reducible<MapFunction, Reducible>&& reducible, Reducer&& reducer, Seed&& seed)
 {
@@ -71,6 +95,7 @@ typename std::decay<Seed>::type reduce(map_reducible<MapFunction, Reducible>&& r
 namespace detail
 {
 	/**
+    * @internal
     * This struct is a holder for the arguments of the map function.
     * It is used to enable pipe expressions for map.
 	*/
@@ -90,6 +115,10 @@ namespace detail
 		}
 	};
 
+	/**
+    * @internal
+    * Operator overload to enable the use of \ref map_reducible_expression in pipe expressions.
+	*/
 	template<typename Reducible, typename MapFunction>
 	map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type>
 	operator|(Reducible&& reducible, map_reducible_expression<MapFunction>&& mapExpression)
@@ -98,6 +127,10 @@ namespace detail
 		return return_t(std::move(mapExpression.mapFunction), std::forward<Reducible>(reducible));
 	}
 
+	/**
+    * @internal
+    * Operator overload to enable the use of r-value references to \ref map_reducible_expression in pipe expressions.
+	*/
     template<typename Reducible, typename MapFunction>
     map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type>
 	operator|(Reducible&& reducible, map_reducible_expression<MapFunction> const& mapExpression)
@@ -110,9 +143,14 @@ namespace detail
 /**
 * Creates a new reducible that when reduced, reduces the
 * original reducible with its values mapped through the given function.
+* Conceptually, this acts as if the underlying sequence were transformed by the
+* mapping function, and operates lazily.
+* @remark It is often preferable to use the one argument version map(MapFunction) in
+* a piped expression.
 * @param reducible The reducible that is to have its value mapped.
 * @param mapFunction A function that maps the elements of the given reducible.
 * @returns A new reducible that implements the described semantics when reduced.
+* @sa map()
 */
 template<typename MapFunction, typename Reducible>
 map_reducible<typename std::decay<MapFunction>::type, typename std::decay<Reducible>::type>
@@ -128,6 +166,7 @@ map(Reducible&& reducible, MapFunction&& mapFunction)
 * destined to be used in a pipe expression.
 * @param mapFunction A function that maps the elements of the reducible to be given.
 * @returns A holder object that can be composed with a reducible through a pipe | operator to perform the operation.
+* @sa map()
 */
 template<typename MapFunction>
 detail::map_reducible_expression<typename std::decay<MapFunction>::type>

@@ -1,6 +1,13 @@
 #ifndef WENDA_REDUCERS_REDUCIBLES_RANGE_REDUCIBLE_H_INCLUDED
 #define WENDA_REDUCERS_REDUCIBLES_RANGE_REDUCIBLE_H_INCLUDED
 
+/**
+* @file range_reducible.h
+* This file contains all the implementation to allow a given range to be reducible.
+* Including this file will introduce overloads of reduce for c++ ranges, and allow
+* the library to be used with a number of C++ classes, including arrays, vectors etc.
+*/
+
 #include "../reducers_common.h"
 
 #include <iterator>
