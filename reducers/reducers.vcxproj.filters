@@ -42,5 +42,8 @@
     <ClInclude Include="include\wenda\reducers\into.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\wenda\reducers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

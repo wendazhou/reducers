@@ -16,7 +16,7 @@ As we have already seen, all ranges are reducible. Hence, to get started with th
 ```
 #include <iostream>
 #include <functional>
-#include <wenda/reducers/all.h>
+#include <wenda/reducers.h>
 
 namespace r = wenda::reducers;
 
