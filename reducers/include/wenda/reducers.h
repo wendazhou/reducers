@@ -9,9 +9,9 @@
 #include "reducers/range_reducible.h"
 #include "reducers/iterator_pair_reducible.h"
 
-#include "reducers/collect.h"
-#include "reducers/filter.h"
-#include "reducers/map.h"
+#include "reducers/transformers/collect.h"
+#include "reducers/transformers/filter.h"
+#include "reducers/transformers/map.h"
 
 #include "reducers/into.h"
 

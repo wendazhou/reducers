@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\transformers">
+      <UniqueIdentifier>{7716bd45-acae-473c-bab8-842924d28eef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\wenda\reducers\reduce.h">
@@ -22,15 +25,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\wenda\reducers\range_reducible.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\wenda\reducers\filter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\wenda\reducers\map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\wenda\reducers\collect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\wenda\reducers\iterator_pair_reducible.h">
@@ -44,6 +38,15 @@
     </ClInclude>
     <ClInclude Include="include\wenda\reducers.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\transformers\filter.h">
+      <Filter>Header Files\transformers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\transformers\collect.h">
+      <Filter>Header Files\transformers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\transformers\map.h">
+      <Filter>Header Files\transformers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

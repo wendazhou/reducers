@@ -1,7 +1,7 @@
 #include <wenda/reducers/iterator_pair_reducible.h>
 #include <wenda/reducers/reduce.h>
-#include <wenda/reducers/map.h>
-#include <wenda/reducers/filter.h>
+#include <wenda/reducers/transformers/map.h>
+#include <wenda/reducers/transformers/filter.h>
 
 using namespace WENDA_REDUCERS_NAMESPACE;
 

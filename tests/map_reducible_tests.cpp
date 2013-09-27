@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <CppUnitTest.h>
 
-#include <wenda/reducers/map.h>
+#include <wenda/reducers/transformers/map.h>
 #include <wenda/reducers/range_reducible.h>
 #include <wenda/reducers/reduce.h>
 
