@@ -1,7 +1,7 @@
 #ifndef WENDA_REDUCERS_SEQUENCE_REDUCBILE_H_INCLUDED
 #define WENDA_REDUCERS_SEQUENCE_REDUCBILE_H_INCLUDED
 
-#include "reducers_common.h"
+#include "../reducers_common.h"
 
 #include <utility>
 #include <type_traits>

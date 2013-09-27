@@ -3,7 +3,7 @@
 
 #include <wenda/reducers/into.h>
 #include <wenda/reducers/reduce.h>
-#include <wenda/reducers/range_reducible.h>
+#include <wenda/reducers/reducibles/range_reducible.h>
 
 #include <vector>
 #include <set>

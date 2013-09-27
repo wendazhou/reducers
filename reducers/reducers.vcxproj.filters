@@ -16,21 +16,15 @@
     <Filter Include="Header Files\transformers">
       <UniqueIdentifier>{7716bd45-acae-473c-bab8-842924d28eef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\reducibles">
+      <UniqueIdentifier>{9d1b0550-2ff8-4eb5-b413-26a445426f46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\wenda\reducers\reduce.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\wenda\reducers\reducers_common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\wenda\reducers\range_reducible.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\wenda\reducers\iterator_pair_reducible.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\wenda\reducers\sequence_reducible.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\wenda\reducers\into.h">
@@ -47,6 +41,15 @@
     </ClInclude>
     <ClInclude Include="include\wenda\reducers\transformers\map.h">
       <Filter>Header Files\transformers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\reducibles\iterator_pair_reducible.h">
+      <Filter>Header Files\reducibles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\reducibles\range_reducible.h">
+      <Filter>Header Files\reducibles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wenda\reducers\reducibles\sequence_reducible.h">
+      <Filter>Header Files\reducibles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

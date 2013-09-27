@@ -1,12 +1,12 @@
 #ifndef WENDA_REDUCERS_RANGE_REDUCIBLE_H_INCLUDED
 #define WENDA_REDUCERS_RANGE_REDUCIBLE_H_INCLUDED
 
-#include "reducers_common.h"
+#include "../reducers_common.h"
 
 #include <iterator>
 #include <type_traits>
 
-#include "reduce.h"
+#include "../reduce.h"
 
 WENDA_REDUCERS_NAMESPACE_BEGIN
 

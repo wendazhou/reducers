@@ -1,4 +1,4 @@
-#include <wenda/reducers/iterator_pair_reducible.h>
+#include <wenda/reducers/reducibles/iterator_pair_reducible.h>
 #include <wenda/reducers/reduce.h>
 #include <wenda/reducers/transformers/map.h>
 #include <wenda/reducers/transformers/filter.h>

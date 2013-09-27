@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <CppUnitTest.h>
 
-#include <wenda/reducers/sequence_reducible.h>
+#include <wenda/reducers/reducibles/sequence_reducible.h>
 #include <wenda/reducers/reduce.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

@@ -1,7 +1,7 @@
 #ifndef WENDA_REDUCIBLE_ITERATOR_PAIR_REDUCIBLE_H_INCLUDED
 #define WENDA_REDUCIBLE_ITERATOR_PAIR_REDUCIBLE_H_INCLUDED
 
-#include "reducers_common.h"
+#include "../reducers_common.h"
 
 #include <utility>
 #include <type_traits>
