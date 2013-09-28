@@ -73,7 +73,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\wenda\reducers.h" />
+    <ClInclude Include="include\wenda\reducers\detail\is_range.h" />
+    <ClInclude Include="include\wenda\reducers\fold.h" />
+    <ClInclude Include="include\wenda\reducers\foldables\range_foldable.h" />
     <ClInclude Include="include\wenda\reducers\monoid\monoid.h" />
+    <ClInclude Include="include\wenda\reducers\monoid\monoid_fold.h" />
     <ClInclude Include="include\wenda\reducers\monoid\monoid_reduce.h" />
     <ClInclude Include="include\wenda\reducers\transformers\collect.h" />
     <ClInclude Include="include\wenda\reducers\transformers\filter.h" />
