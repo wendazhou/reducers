@@ -12,6 +12,7 @@
 #include <type_traits>
 
 #include "../reduce.h"
+#include "../fold.h"
 
 WENDA_REDUCERS_NAMESPACE_BEGIN
 
@@ -84,6 +85,34 @@ typename std::decay<Seed>::type reduce(filter_reducible<Reducible, Predicate>&& 
 		std::move(reducible.reducible),
 		filter_reducer_t(std::move(reducible.predicate), std::forward<Reducer>(reducer)),
 		std::forward<Seed>(seed));
+}
+
+/**
+* Overloads the fold() function to fold @ref filter_reducible
+*/
+template<typename Foldable, typename Predicate, typename Folder, typename Element>
+typename std::decay<Element>::type fold(filter_reducible<Foldable, Predicate> const& foldable, Folder&& folder, Element&& identity)
+{
+	typedef detail::filter_reducible_function<Predicate, typename std::decay<Folder>::type> filter_fold_t;
+
+	return fold(
+		foldable.reducible,
+		filter_fold_t(foldable.predicate, std::forward<Folder>(folder)),
+		std::forward<Element>(identity));
+}
+
+/**
+* Overloads the fold() function to fold r-value references to @ref filter_reducible
+*/
+template<typename Foldable, typename Predicate, typename Folder, typename Element>
+typename std::decay<Element>::type fold(filter_reducible<Foldable, Predicate>&& foldable, Folder&& folder, Element&& identity)
+{
+	typedef detail::filter_reducible_function<Predicate, typename std::decay<Folder>::type> filter_fold_t;
+
+	return fold(
+		std::move(foldable.reducible),
+		filter_fold_t(std::move(foldable.predicate), std::forward<Folder>(folder)),
+		std::forward<Element>(identity));
 }
 
 namespace detail

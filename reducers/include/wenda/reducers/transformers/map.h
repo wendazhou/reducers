@@ -12,6 +12,7 @@
 #include <type_traits>
 
 #include "../reduce.h"
+#include "../fold.h"
 
 WENDA_REDUCERS_NAMESPACE_BEGIN
 
@@ -90,6 +91,32 @@ typename std::decay<Seed>::type reduce(map_reducible<MapFunction, Reducible>&& r
         std::move(reducible.reducible),
 		map_function_type(std::move(reducible.mapFunction), std::forward<Reducer>(reducer)),
 		std::forward<Seed>(seed));
+}
+
+/**
+* Overloads the fold() function to fold values of type @ref map_reducible.
+*/
+template<typename Foldable, typename MapFunction, typename Folder, typename Element>
+typename std::decay<Element>::type fold(map_reducible<MapFunction, Foldable> const& foldable, Folder&& folder, Element&& identity)
+{
+	typedef detail::map_reducing_function<MapFunction, typename std::decay<Folder>::type> map_function_t;
+	return fold(
+		foldable.reducible,
+		map_function_t(foldable.mapFunction, std::forward<Folder>(folder)),
+		std::forward<Element>(identity));
+}
+
+/**
+* Overloads the fold() function to fold values of type @ref map_reducible.
+*/
+template<typename Foldable, typename MapFunction, typename Folder, typename Element>
+typename std::decay<Element>::type fold(map_reducible<MapFunction, Foldable>&& foldable, Folder&& folder, Element&& identity)
+{
+	typedef detail::map_reducing_function<MapFunction, typename std::decay<Folder>::type> map_function_t;
+	return fold(
+		std::move(foldable.reducible),
+		map_function_t(std::move(foldable.mapFunction), std::forward<Folder>(folder)),
+		std::forward<Element>(identity));
 }
 
 namespace detail
