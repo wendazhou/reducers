@@ -90,29 +90,31 @@ typename std::decay<Seed>::type reduce(filter_reducible<Reducible, Predicate>&& 
 /**
 * Overloads the fold() function to fold @ref filter_reducible
 */
-template<typename Foldable, typename Predicate, typename Folder, typename Element>
-typename std::decay<Element>::type fold(filter_reducible<Foldable, Predicate> const& foldable, Folder&& folder, Element&& identity)
+template<typename Foldable, typename Predicate, typename Reduce, typename Combine>
+typename detail::fold_return_type<filter_reducible<Foldable, Predicate>, Reduce, Combine>::type
+fold(filter_reducible<Foldable, Predicate> const& foldable, Reduce&& reduce, Combine&& combine)
 {
-	typedef detail::filter_reducible_function<Predicate, typename std::decay<Folder>::type> filter_fold_t;
+	typedef detail::filter_reducible_function<Predicate, typename std::decay<Reduce>::type> filter_fold_t;
 
 	return fold(
 		foldable.reducible,
-		filter_fold_t(foldable.predicate, std::forward<Folder>(folder)),
-		std::forward<Element>(identity));
+		filter_fold_t(foldable.predicate, std::forward<Reduce>(reduce)),
+		std::forward<Combine>(combine));
 }
 
 /**
 * Overloads the fold() function to fold r-value references to @ref filter_reducible
 */
-template<typename Foldable, typename Predicate, typename Folder, typename Element>
-typename std::decay<Element>::type fold(filter_reducible<Foldable, Predicate>&& foldable, Folder&& folder, Element&& identity)
+template<typename Foldable, typename Predicate, typename Reduce, typename Combine>
+typename detail::fold_return_type<filter_reducible<Foldable, Predicate>, Reduce, Combine>::type
+fold(filter_reducible<Foldable, Predicate>&& foldable, Reduce&& reduce, Combine&& combine)
 {
-	typedef detail::filter_reducible_function<Predicate, typename std::decay<Folder>::type> filter_fold_t;
+	typedef detail::filter_reducible_function<Predicate, typename std::decay<Reduce>::type> filter_fold_t;
 
 	return fold(
 		std::move(foldable.reducible),
-		filter_fold_t(std::move(foldable.predicate), std::forward<Folder>(folder)),
-		std::forward<Element>(identity));
+		filter_fold_t(std::move(foldable.predicate), std::forward<Reduce>(reduce)),
+		std::forward<Combine>(combine));
 }
 
 namespace detail

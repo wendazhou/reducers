@@ -17,7 +17,7 @@ WENDA_REDUCERS_NAMESPACE_BEGIN
 
 namespace detail
 {
-    template<typename T, typename ReduceFunction, typename CombineFunction>
+	template<typename T, typename ReduceFunction, typename CombineFunction>
 	class has_foldable_member_function
 	{
 		template<typename U> static std::true_type test(
@@ -26,6 +26,12 @@ namespace detail
 	public:
 		typedef decltype(test<T>(nullptr)) type;
 		static const bool value = type::value;
+	};
+
+	template<typename Foldable, typename Reduce, typename Combine>
+	struct fold_return_type
+	{
+		typedef typename std::result_of<Combine()>::type type;
 	};
 }
 
