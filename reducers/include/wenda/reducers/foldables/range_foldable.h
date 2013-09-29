@@ -18,6 +18,8 @@
 #endif
 
 #include "../detail/is_range.h"
+#include "../reducibles/iterator_pair_reducible.h"
+#include "../reduce.h"
 #include "../fold.h"
 
 WENDA_REDUCERS_NAMESPACE_BEGIN
@@ -40,14 +42,35 @@ namespace detail
 
 namespace detail
 {
-    template<typename Range, typename Function, typename Element>
-	typename std::decay<Element>::type 
-	fold_range_impl(Range&& range, Function&& function, Element&& identity)
+    template<typename Reduce>
+	struct range_reduce_function
+	{
+		Reduce const& reducer;
+
+		range_reduce_function(Reduce const& reducer)
+			: reducer(reducer)
+		{}
+
+        template<typename Beg, typename End, typename ReduceType>
+		typename std::decay<ReduceType>::type operator()(Beg&& beg, End&& end, ReduceType&& seed) const
+		{
+			return make_iterator_pair_reducible(std::forward<Beg>(beg), std::forward<End>(end))
+				| reduce(reducer, std::forward<ReduceType>(seed));
+		}
+	};
+
+    template<typename Range, typename Reduce, typename Combine>
+	typename std::decay<typename std::result_of<Combine()>::type>::type 
+	fold_range_impl(Range&& range, Reduce&& reduce, Combine&& combine)
 	{
 		using std::begin;
 		using std::end;
 #ifdef _MSC_VER
-		return concurrency::parallel_reduce(begin(range), end(range), std::forward<Element>(identity), std::forward<Function>(function));
+		return concurrency::parallel_reduce(
+			begin(range), end(range), 
+			combine(),
+			range_reduce_function<typename std::decay<Reduce>::type>(std::forward<Reduce>(reduce)),
+            combine);
 #else
 		static_assert(false, "no implementation of fold_range_impl available for your platform.");
 #endif
@@ -55,22 +78,17 @@ namespace detail
 }
 
 /**
-* Folds the given @p range using the given @p function and @p identity element.
-* Note that it must be the case that @p identity is a left identity for the given @p function,
-* and that the function is associative.
-* @param range An object that models a C++ range to be folded.
-* @param function The function to be used when folding the range.
-* @param identity The identity value for the given @p function.
-* @returns The result of aggregating all the values in the @p range using the given @p function.
+* Overload of fold() for C++ ranges.
+* @param range A C++ range that is to be folded.
 */
-template<typename Range, typename Function, typename Element>
+template<typename Range, typename Reduce, typename Combine>
 typename std::enable_if<
-    detail::enable_range_fold<Range, Function, Element>::value,
-    typename std::decay<Element>::type
+    detail::enable_range_fold<Range, Reduce, Combine>::value,
+    typename std::decay<typename std::result_of<Combine()>::type>::type
 >::type
-fold(Range&& range, Function&& function, Element&& identity)
+fold(Range&& range, Reduce&& reduce, Combine&& combine)
 {
-	return detail::fold_range_impl(std::forward<Range>(range), std::forward<Function>(function), std::forward<Element>(identity));
+	return detail::fold_range_impl(std::forward<Range>(range), std::forward<Reduce>(reduce), std::forward<Combine>(combine));
 }
 
 WENDA_REDUCERS_NAMESPACE_END

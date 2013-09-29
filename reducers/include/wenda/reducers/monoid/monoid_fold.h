@@ -16,6 +16,23 @@
 
 WENDA_REDUCERS_NAMESPACE_BEGIN
 
+namespace detail
+{
+    template<typename Monoid>
+	struct monoid_combine
+		: monoid_traits<Monoid>::operation_t
+	{
+		typedef typename monoid_traits<Monoid>::element_t element_t;
+
+		element_t operator()() const
+		{
+			return monoid_traits<Monoid>::unit();
+		}
+
+		using monoid_traits<Monoid>::operation_t::operator();
+	};
+}
+
 /**
 * Folds the given @p foldable over the structure of the given @p Monoid.
 * Note that it is usually easier to use the no argument version fold(void)
@@ -29,7 +46,9 @@ template<typename Monoid, typename Foldable>
 typename monoid_traits<Monoid>::element_t
 fold(Foldable&& foldable)
 {
-	return fold(std::forward<Foldable>(foldable), monoid_traits<Monoid>::operation_t(), monoid_traits<Monoid>::unit());
+	typedef detail::monoid_combine<Monoid> combine_t;
+	typedef typename monoid_traits<Monoid>::operation_t reduce_t;
+	return fold(std::forward<Foldable>(foldable), reduce_t(), combine_t());
 }
 
 namespace detail
