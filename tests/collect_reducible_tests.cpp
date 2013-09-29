@@ -4,6 +4,9 @@
 #include <wenda/reducers/transformers/collect.h>
 #include <wenda/reducers/reducibles/range_reducible.h>
 #include <wenda/reducers/reduce.h>
+#include <wenda/reducers/fold.h>
+#include <wenda/reducers/monoid/monoid_fold.h>
+#include <wenda/reducers/foldables/range_foldable.h>
 
 #include <vector>
 
@@ -46,6 +49,31 @@ namespace tests
             auto result = 
                 reducible
 				| reduce(std::plus<int>(), 0);
+
+			Assert::AreEqual(1 + 2 + 3 + 4 + 5 + 6, result);
+		}
+
+		TEST_METHOD(Collect_Can_Be_Folded_RValue)
+		{
+			std::vector<std::vector<int>> data{ { 1, 2, 3 }, { 4, 5, 6 } };
+
+			auto result = 
+				data
+				| collect([](std::vector<int> const& d) { return d; })
+				| fold<additive_monoid<int>>();
+
+			Assert::AreEqual(1 + 2 + 3 + 4 + 5 + 6, result);
+		}
+
+		TEST_METHOD(Collect_Can_Be_Folded_LValue)
+		{
+			std::vector<std::vector<int>> data{ { 1, 2, 3 }, { 4, 5, 6 } };
+
+			auto reducible =
+				data
+				| collect([](std::vector<int> const& d) { return d; });
+            auto result = 
+                fold<additive_monoid<int>>(reducible);
 
 			Assert::AreEqual(1 + 2 + 3 + 4 + 5 + 6, result);
 		}

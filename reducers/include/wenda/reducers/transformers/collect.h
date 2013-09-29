@@ -12,6 +12,7 @@
 #include <type_traits>
 
 #include "../reduce.h"
+#include "../fold.h"
 
 WENDA_REDUCERS_NAMESPACE_BEGIN
 
@@ -29,7 +30,7 @@ namespace detail
 		}
 
         template<typename Value, typename Seed>
-		typename std::decay<Seed>::type operator()(Seed&& seed, Value&& value)
+		typename std::decay<Seed>::type operator()(Seed&& seed, Value&& value) const
 		{
 			return expander(std::forward<Value>(value)) 
 				   | reduce(reducer, std::forward<Seed>(seed));
@@ -65,6 +66,9 @@ struct collect_reducible
 	}
 };
 
+/**
+* Overload the reduce() function for references to @ref collect_reducible.
+*/
 template<typename Reducible, typename ExpandFunction, typename Reducer, typename Seed>
 typename std::decay<Seed>::type reduce(collect_reducible<Reducible, ExpandFunction> const& reducible, Reducer&& reducer, Seed&& seed)
 {
@@ -75,6 +79,9 @@ typename std::decay<Seed>::type reduce(collect_reducible<Reducible, ExpandFuncti
 		reducible.expandFunction), std::forward<Seed>(seed));
 }
 
+/**
+* Overload the reduce() function for r-value reference to @ref collect_reducible.
+*/
 template<typename Reducible, typename ExpandFunction, typename Reducer, typename Seed>
 typename std::decay<Seed>::type reduce(collect_reducible<Reducible, ExpandFunction>&& reducible, Reducer&& reducer, Seed&& seed)
 {
@@ -83,6 +90,34 @@ typename std::decay<Seed>::type reduce(collect_reducible<Reducible, ExpandFuncti
 		std::move(reducible.reducible),
 		collect_reducer_t(std::forward<Reducer>(reducer), std::move(reducible.expandFunction)), 
 		std::forward<Seed>(seed));
+}
+
+/**
+* Overload the fold() function for references to @ref collect_reducible.
+*/
+template<typename Foldable, typename ExpandFunction, typename Reduce, typename Combine>
+typename detail::fold_return_type<collect_reducible<Foldable, ExpandFunction>, Reduce, Combine>::type
+fold(collect_reducible<Foldable, ExpandFunction> const& foldable, Reduce&& reduce, Combine&& combine)
+{
+	typedef detail::collect_reducing_function<typename std::decay<Reduce>::type, ExpandFunction> collect_reducer_t;
+	return fold(
+		foldable.reducible,
+		collect_reducer_t(std::forward<Reduce>(reduce), foldable.expandFunction), 
+		std::forward<Combine>(combine));
+}
+
+/**
+* Overload the fold() function for r-value references to @ref collect_reducible.
+*/
+template<typename Foldable, typename ExpandFunction, typename Reduce, typename Combine>
+typename detail::fold_return_type<collect_reducible<Foldable, ExpandFunction>, Reduce, Combine>::type
+fold(collect_reducible<Foldable, ExpandFunction>&& foldable, Reduce&& reduce, Combine&& combine)
+{
+	typedef detail::collect_reducing_function<typename std::decay<Reduce>::type, ExpandFunction> collect_reducer_t;
+	return fold(
+		std::move(foldable.reducible),
+		collect_reducer_t(std::forward<Reduce>(reduce), std::move(foldable.expandFunction)), 
+		std::forward<Combine>(combine));
 }
 
 namespace detail
